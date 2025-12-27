@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+
+-----------------------------
+Creator: Nitay B.
+Date:    27.12.2025
+-----------------------------
+
+Explanation: This file is the classic function that we try to convert to grover
+             With it we can also check if our grover algorithm worked.
+"""
+
 from qiskit import *
 from qiskit_aer import Aer
 from qiskit.visualization import plot_histogram
@@ -65,11 +79,11 @@ def step_one_xor(qc):
     
 def step_two_rotate(qc):
     
-    # --- מחזור 1: q6 → q8 → q10 ---
+    # --- round 1: q6 → q8 → q10 ---
     qc.swap(state[0], state[4])
     qc.swap(state[0], state[2])
     
-    # --- מחזור 2: q7 → q9 → q11 ---
+    # --- round 2: q7 → q9 → q11 ---
     qc.swap(state[1], state[5])
     qc.swap(state[1], state[3])
     
@@ -87,7 +101,6 @@ def step_three_adder(qc):
         
         
 def add_one_bit_full(qc: QuantumCircuit, state: int, value: int, pre_carry: int, carry_out: int, ancilla: int):
-    # 💡 1. קודם מחשבים carry: majority(state, value, pre_carry)
 
     # temp = state AND value
     qc.ccx(state, value, ancilla)
@@ -101,7 +114,6 @@ def add_one_bit_full(qc: QuantumCircuit, state: int, value: int, pre_carry: int,
     # carry_out ^= temp (from ancilla)
     qc.cx(ancilla, carry_out)
 
-    # ✅ 2. עכשיו מחושבים carry → נחשב את הסכום
     # sum = state XOR value XOR pre_carry
     qc.cx(value, state)
     qc.cx(pre_carry, state)
