@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+
+-----------------------------
+Creator: Nitay B.
+Date:    27.12.2025
+-----------------------------
+
+Explanation: This file is the classic function that we try to convert to grover
+             With it we can also check if our grover algorithm worked.
+"""
+
 from qiskit import *
 from qiskit_aer import Aer
 from qiskit.visualization import plot_histogram
