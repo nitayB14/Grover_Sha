@@ -5,7 +5,7 @@ from qiskit.circuit.library import MCXGate
 from qiskit.circuit.library import ZGate
 
 
-size = 6
+size = 8
 value = list(range(size))
 state = list(range(size, size * 2))
 carry_in = (size * 2)
@@ -165,22 +165,25 @@ def step_one_xor_uncompute(qc):
 #this function activate rotation
 def step_two_rotate(qc):
     
-    # --- מחזור 1: q6 → q8 → q10 ---
-    qc.swap(state[0], state[4])
     qc.swap(state[0], state[2])
+    qc.swap(state[2], state[4])
+    qc.swap(state[4], state[6])
     
-    # --- מחזור 2: q7 → q9 → q11 ---
-    qc.swap(state[1], state[5])
     qc.swap(state[1], state[3])
+    qc.swap(state[3], state[5])
+    qc.swap(state[5], state[7])
     
     
 
 #this function activate reversed rotation
 def step_two_rotate_uncompute(qc):
+    qc.swap(state[5], state[7])
+    qc.swap(state[3], state[5])
     qc.swap(state[1], state[3])
-    qc.swap(state[1], state[5])
+    qc.swap(state[4], state[6])
+    qc.swap(state[2], state[4])
     qc.swap(state[0], state[2])
-    qc.swap(state[0], state[4])
+
 
     
 """
@@ -191,23 +194,28 @@ Explanation:
 
 
 def flip_oracle(qc):
-    
-    qc.x(state[0])
-    qc.x(state[1])
-    qc.x(state[2])
-    qc.x(state[3])
-    
-    qc.mcx([state[0],state[1], state[2], state[3]], grover_ancilla)
-    qc.z(grover_ancilla)
-    qc.mcx([state[0],state[1], state[2], state[3]], grover_ancilla)
-
-    qc.x(state[3])
-    qc.x(state[2])
-    qc.x(state[1])
-    qc.x(state[0])
-    
     """
-    5 qubit starting with 0
+    qc.x(state[0])
+    qc.x(state[1])
+    qc.x(state[2])
+    qc.x(state[3])
+    qc.x(state[4])
+    qc.x(state[5])
+
+    qc.mcx([state[0],state[1], state[2], state[3], state[4], state[5]], grover_ancilla)
+    qc.z(grover_ancilla)
+    qc.mcx([state[0],state[1], state[2], state[3], state[4], state[5]], grover_ancilla)
+
+    qc.x(state[5])
+    qc.x(state[4])
+    qc.x(state[3])
+    qc.x(state[2])
+    qc.x(state[1])
+    qc.x(state[0])
+    """
+    
+    
+    #5 qubit starting with 0
     
     qc.x(state[0])
     qc.x(state[1])
@@ -225,7 +233,6 @@ def flip_oracle(qc):
     qc.x(state[2])
     qc.x(state[1])
     qc.x(state[0])
-    """
     
     qc.barrier()
     
@@ -237,15 +244,15 @@ def flip_oracle(qc):
 this function activate the diffuzer 
 """        
 def diffuser(qc):
-    control_qubits = [value[0], value[1], value[2], value[3], value[4]]
-    target_qubit = value[5] # One target qubit
+    control_qubits = [value[0], value[1], value[2], value[3], value[4], value[5], value[6]]
+    target_qubit = value[7] # One target qubit
     
     
     qc.h(value)
     qc.x(value)
 
     qc.h(target_qubit)
-    qc.append(ZGate().control(5), control_qubits + [target_qubit])
+    qc.append(ZGate().control(7), control_qubits + [target_qubit])
     qc.h(target_qubit)
     
     qc.x(value)
@@ -273,7 +280,7 @@ def print_measurements(qc, value):
     transpiled_qc = transpile(qc, simulation)
     
     #run the simulation
-    job = simulation.run(transpiled_qc, shots=1024)
+    job = simulation.run(transpiled_qc, shots=2048)
     #get result
     result = job.result()
     counts = result.get_counts()
@@ -286,10 +293,11 @@ def print_measurements(qc, value):
     
     for k, v in sorted_flipped_counts.items():
         print(f"value: {k[:size]}: {v}")
+        #print(f"state: {k[size:]}")
     
     
     plot_histogram(counts)
-    qc.draw('mpl')
+    #qc.draw('mpl')
     
     #print(flipped_counts)
 
@@ -301,7 +309,6 @@ def encoding(qc, input_bits):
     for i in range(value[0], (value[size-1] + 1)):
         if input_bits[i] == '1':
             qc.x(value[i])           
-    
     """
     
     for j in range(state[0], (state[size-1] + 1)):
@@ -324,10 +331,9 @@ def main():
     qc = QuantumCircuit(grover_ancilla + 1, size*2)
 
     
-    #value_str = "101101"
-    value_str = "000000"
+    value_str = "00000000"
 
-    state_str = "110011"
+    state_str = "11100101"
     encoding(qc, value_str + state_str )
     
     quantum_hash_oracle(qc)
