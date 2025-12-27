@@ -15,9 +15,9 @@ def show_hash_collisions():
     """
     collision_map = defaultdict(list)
 
-    for i in range(64):
-        input_bin = format(i, '06b')
-        output = bit_hash_6bit(input_bin)
+    for i in range(256):
+        input_bin = format(i, '08b')
+        output = bit_hash_8bit(input_bin)
         collision_map[output].append(input_bin)
 
     sorted_map = sorted(collision_map.items(), key=lambda x: (-len(x[1]), x[0]))
@@ -25,43 +25,47 @@ def show_hash_collisions():
     print(f"\n🔍 זיהוי התנגשויות בפלטים של פונקציית ההאש:\n{'-'*50}")
     for i, (hash_out, inputs) in enumerate(sorted_map, 1):
         print(f"{i:02d}. Output: {hash_out} | Occurrences: {len(inputs)} | Inputs: {', '.join(inputs)}")
-    print(f"\n✅ סה״כ פלטים ייחודיים: {len(sorted_map)} מתוך 64 קלטים אפשריים\n")
+    print(f"\n✅ סה״כ פלטים ייחודיים: {len(sorted_map)} מתוך 254 קלטים אפשריים\n")
     
     
-def bit_hash_6bit(bitstring: str) -> str:
+def bit_hash_8bit(bitstring: str) -> str:
     """
-    פונקציית האש על קלט של 6 ביטים שמחזירה פלט בגודל 6 ביטים.
+    פונקציית האש על קלט של 8 ביטים שמחזירה פלט בגודל 8 ביטים.
     כולל הדפסות ביניים של מצב המשתנה state לצורכי דיבאג.
     """
-    assert len(bitstring) == 6 and set(bitstring) <= {'0', '1'}, "Input must be 6-bit binary string"
+    assert len(bitstring) == 8 and set(bitstring) <= {'0', '1'}, "Input must be 8-bit binary string"
 
     # חילוץ ערכים
-    #state = 0b010101 # 
-    state = 0b110011  #
+    #state = 0b01010111 # 
+    state = 0b11100101  #
     value = int(bitstring, 2)
+
     #print(f"state:            {bin(state)[2:].zfill(6)}")
     # שלב 1: XOR ראשוני
+    
     state ^= value
-    #print(f"After XOR:        {bin(state)[2:].zfill(6)}")
+    
+    
+    #print(f"After XOR:        {bin(state)[2:].zfill(8)}")
     #print(f"state: {bin(state)}, value: {bin(value)}")
 
     
     # שלב 2: רוטציה של 2 ביטים שמאלה
-    state = ((state << 2) | (state >> 4)) & 0b111111
-    #print(f"After rotate:     {bin(state)[2:].zfill(6)}")
+    state = ((state << 2) | (state >> 6)) & 0b11111111
+    #print(f"After rotate:     {bin(state)[2:].zfill(8)}")
     #print(f"state: {bin(state)}, value: {bin(value)}")
 
     #print(f"state: {state}, value: {value}")
     # שלב 3: הוספה של value * 7
-    state = state + value & 0b111111
-    #print(f"After add:     {bin(state)[2:].zfill(6)}")
+    state = state + value & 0b11111111
+    #print(f"After add:     {bin(state)[2:].zfill(8)}")
     #print(f"state: {bin(state)}, value: {bin(value)}")
     
     
     
     #another shift
-    state = ((state << 2) | (state >> 4)) & 0b111111
-    #print(f"After rotation:     {bin(state)[2:].zfill(6)}")
+    state = ((state << 2) | (state >> 6)) & 0b11111111
+    #print(f"After rotation:     {bin(state)[2:].zfill(8)}")
     #print(f"state: {bin(state)}, value: {bin(value)}")
     
     #another xor
@@ -69,15 +73,15 @@ def bit_hash_6bit(bitstring: str) -> str:
     #print(f"After XOR:        {bin(state)[2:].zfill(6)}")
     #print(f"state: {bin(state)}, value: {bin(value)}")
     
-    return bin(state)[2:].zfill(6)
+    return bin(state)[2:].zfill(8)
 
 
 
 def find_inputs_with_leading_zeros(n: int):
     matches = []
-    for i in range(64):
-        input_bin = format(i, '06b')
-        output = bit_hash_6bit(input_bin)
+    for i in range(256):
+        input_bin = format(i, '08b')
+        output = bit_hash_8bit(input_bin)
         print(f"input: {str(bin(i))[2:]} , output: {output}")
         if output.startswith('0' * n):
             matches.append((input_bin, output))
@@ -92,12 +96,12 @@ def main():
         
         binary = format(i, '06b')
         
-        result = bit_hash_6bit(binary)
+        result = bit_hash_8bit(binary)
         print(f"input: {binary} , output: {result}")
     """
       
-    value = "011000"
-    result = bit_hash_6bit(value)
+    value = "01101001"
+    result = bit_hash_8bit(value)
     print(f"input: {value} , output: {result}")
 
 
