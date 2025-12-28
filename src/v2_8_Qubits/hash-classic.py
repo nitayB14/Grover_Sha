@@ -32,36 +32,36 @@ def bit_hash_8bit(bitstring: str) -> str:
     
     assert len(bitstring) == 8 and set(bitstring) <= {'0', '1'}, "Input must be 8-bit binary string"
 
-    #state = 0b01010111 # 
-    state = 0b11100101  #
-    value = int(bitstring, 2)
+    #data = 0b01010111 # 
+    data = 0b00111010  #
+    nonce = int(bitstring, 2)
 
     #xor
-    state ^= value
-    #print(f"After XOR:        {bin(state)[2:].zfill(8)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data ^= nonce
+    #print(f"After XOR:        {bin(data)[2:].zfill(8)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
 
     #shift
-    state = ((state << 2) | (state >> 6)) & 0b11111111
-    #print(f"After rotate:     {bin(state)[2:].zfill(8)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = ((data << 2) | (data >> 6)) & 0b11111111
+    #print(f"After rotate:     {bin(data)[2:].zfill(8)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
 
     #add
-    state = state + value & 0b11111111
-    #print(f"After add:     {bin(state)[2:].zfill(8)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = data + nonce & 0b11111111
+    #print(f"After add:     {bin(data)[2:].zfill(8)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
     #shift
-    state = ((state << 2) | (state >> 6)) & 0b11111111
-    #print(f"After rotation:     {bin(state)[2:].zfill(8)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = ((data << 2) | (data >> 6)) & 0b11111111
+    #print(f"After rotation:     {bin(data)[2:].zfill(8)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
     #xor
-    state ^= value
-    #print(f"After XOR:        {bin(state)[2:].zfill(8)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data ^= nonce
+    #print(f"After XOR:        {bin(data)[2:].zfill(8)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
-    return bin(state)[2:].zfill(8)
+    return bin(data)[2:].zfill(8)
 
 
 
@@ -98,12 +98,11 @@ def main():
         This function responsible for creating the sha function for 8 qubits data/nonce
     """
       
-    value = "01101001"
-    result = bit_hash_8bit(value)
-    print(f"input: {value} , output: {result}")
+    nonce = "10011001"
+    result = bit_hash_8bit(nonce)
+    print(f"input: {nonce} , output: {result}")
     
-    #"""
-    
+    """
     #using in case we want to see all collision
     
     prefix = 5
@@ -111,6 +110,6 @@ def main():
     print(f"outputs with prefix: {prefix}")
     for i, (inp, outp) in enumerate(results):
         print(f"{i+1:02d}. Input: {inp} -> Output: {outp}")
-    #"""
+    """
     
 main()
