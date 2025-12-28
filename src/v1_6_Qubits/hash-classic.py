@@ -30,36 +30,36 @@ def bit_hash_6bit(bitstring: str) -> str:
     """
     assert len(bitstring) == 6 and set(bitstring) <= {'0', '1'}, "Input must be 6-bit binary string"
 
-    #state = 0b010101 # 
-    state = 0b110011  #
-    value = int(bitstring, 2)
+    #data = 0b010101 # 
+    data = 0b101001  #
+    nonce = int(bitstring, 2)
     
     #xor
-    state ^= value
-    #print(f"After XOR:        {bin(state)[2:].zfill(6)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data ^= nonce
+    #print(f"After XOR:        {bin(data)[2:].zfill(6)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
 
     #shift
-    state = ((state << 2) | (state >> 4)) & 0b111111
-    #print(f"After rotate:     {bin(state)[2:].zfill(6)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = ((data << 2) | (data >> 4)) & 0b111111
+    #print(f"After rotate:     {bin(data)[2:].zfill(6)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
     #add
-    state = state + value & 0b111111
-    #print(f"After add:     {bin(state)[2:].zfill(6)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = data + nonce & 0b111111
+    #print(f"After add:     {bin(data)[2:].zfill(6)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
     #shift
-    state = ((state << 2) | (state >> 4)) & 0b111111
-    #print(f"After rotation:     {bin(state)[2:].zfill(6)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data = ((data << 2) | (data >> 4)) & 0b111111
+    #print(f"After rotation:     {bin(data)[2:].zfill(6)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
     #xor
-    state ^= value
-    #print(f"After XOR:        {bin(state)[2:].zfill(6)}")
-    #print(f"state: {bin(state)}, value: {bin(value)}")
+    data ^= nonce
+    #print(f"After XOR:        {bin(data)[2:].zfill(6)}")
+    #print(f"data: {bin(data)}, nonce: {bin(nonce)}")
     
-    return bin(state)[2:].zfill(6)
+    return bin(data)[2:].zfill(6)
 
 
 
@@ -96,9 +96,9 @@ def main():
         This function responsible for creating the sha function for 6 qubits data/nonce
     """
 
-    value = "110101"
-    result = bit_hash_6bit(value)
-    print(f"nonce: {value} , output: {result}")
+    nonce = "000111"
+    result = bit_hash_6bit(nonce)
+    print(f"nonce: {nonce} , output: {result}")
 
 
     """
