@@ -23,6 +23,7 @@ from qiskit_aer import Aer
 from qiskit.visualization import plot_histogram
 from qiskit.circuit.library import MCXGate
 from qiskit.circuit.library import ZGate
+import matplotlib.pyplot as plt
 
 
 size = 8
@@ -398,9 +399,9 @@ def diffuser(qc):
     qc.h(nonce)
     qc.x(nonce)
 
-    qc.h(target_qubit)
+    #qc.h(target_qubit)
     qc.append(ZGate().control(7), control_qubits + [target_qubit])
-    qc.h(target_qubit)
+    #qc.h(target_qubit)
     
     qc.x(nonce)
     qc.h(nonce)
@@ -448,11 +449,10 @@ def print_measurements(qc, nonce):
     
     plot_histogram(counts)
     #draw circuit
-    qc.draw('mpl')
-    
-    #print(flipped_counts)
+    #qc.draw('mpl')
+    plt.show() 
 
-    
+    #print(flipped_counts)
 
 def encoding(qc, input_bits):
     """

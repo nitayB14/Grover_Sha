@@ -23,11 +23,15 @@ from qiskit_aer import Aer
 from qiskit.visualization import plot_histogram
 from qiskit.circuit.library import MCXGate
 from qiskit.circuit.library import ZGate
-
+import matplotlib.pyplot as plt
 
 size = 6
+
 nonce = list(range(size))
 data = list(range(size, size * 2))
+
+
+
 carry_in = (size * 2)
 ancilla = (size * 2) + 1
 carry_out = list(range(ancilla + 1, ancilla + size + 1))
@@ -437,9 +441,9 @@ def print_measurements(qc, nonce):
     
     plot_histogram(counts)
     #draw circuit
-    qc.draw('mpl')
-    
+    #qc.draw('mpl')
     #print(flipped_counts)
+    plt.show() 
 
     
 
