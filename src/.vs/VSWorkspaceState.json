@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\v1_6_Qubits",
-    "\\v1_6_Qubits\\tests"
+    "\\v1_6_Qubits\\tests",
+    "\\v2_8_Qubits"
   ],
-  "SelectedNode": "\\v1_6_Qubits\\grover.py",
+  "SelectedNode": "\\v2_8_Qubits\\grover.py",
   "PreviewInSolutionExplorer": false
 }

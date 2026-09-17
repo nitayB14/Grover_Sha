@@ -399,9 +399,8 @@ def diffuser(qc):
     qc.h(nonce)
     qc.x(nonce)
 
-    #qc.h(target_qubit)
     qc.append(ZGate().control(7), control_qubits + [target_qubit])
-    #qc.h(target_qubit)
+
     
     qc.x(nonce)
     qc.h(nonce)
